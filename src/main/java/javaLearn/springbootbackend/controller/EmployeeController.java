@@ -4,12 +4,17 @@ import javaLearn.springbootbackend.exception.ResourceNotFoundException;
 import javaLearn.springbootbackend.model.Employee;
 import javaLearn.springbootbackend.model.ResponseObject;
 import javaLearn.springbootbackend.repository.EmployeeRepository;
+import javaLearn.springbootbackend.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +24,13 @@ public class EmployeeController {
 //    dêpndency iecttion
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+     private   EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
 
     @GetMapping()
     public List<Employee> getAllEmployees(){
@@ -64,4 +76,28 @@ public class EmployeeController {
     employeeRepository.delete(employee);
     return ResponseEntity.ok(HttpStatus.PARTIAL_CONTENT);
     }
+    @GetMapping("search")
+    public ResponseEntity <List<Employee>> searchEmployee(@RequestParam("query") String query){
+        return ResponseEntity.ok(employeeService.searchEmployees(query));
+    }
+
+    //pagination
+    @GetMapping("/pagination/{offset}/{pageSize}")
+    public ResponseEntity <List<Employee>> getEmployeeWithPagination(
+            @PathVariable int offset,@PathVariable int pageSize){
+        Page<Employee> listEmployeePagination=employeeService.findEmployeeWithPagination(offset,pageSize);
+        return ResponseEntity.ok(listEmployeePagination.getContent());
+    }
+    @GetMapping("/sortPagnation/{offset}/{pageSize}/{sortBy}")
+    public ResponseEntity <List<Employee>> getEmployeeWithPaginationAndSort(
+            @PathVariable int offset,
+            @PathVariable int pageSize,
+            @PathVariable String sortBy
+    ){
+        List<Employee> listEmployeePagination=employeeService.getAllEmployeesSortedByFirstName(offset,pageSize,sortBy);
+        return ResponseEntity.ok(listEmployeePagination);
+    }
+
+
 }
+
