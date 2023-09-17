@@ -1,9 +1,9 @@
 package javaLearn.springbootbackend.service;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
-
+@Service
 public interface JiraService {
     ResponseEntity<String> getIssue(String issueKey);
 }

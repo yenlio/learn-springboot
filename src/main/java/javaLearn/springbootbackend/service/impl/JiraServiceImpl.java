@@ -1,39 +1,28 @@
 package javaLearn.springbootbackend.service.impl;
 
 import javaLearn.springbootbackend.service.JiraService;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpHeaders;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-
-
-import java.util.Arrays;
-import java.util.List;
-@Service
+@Component
 public class JiraServiceImpl implements JiraService {
 
     @Value("${jira.username}")
     private String username;
 
-    @Value("${jira.apiToken}")
+    @Value("${jira.api-token}")
     private String apiToken;
 
-    @Value("${jira.baseUrl}")
+    @Value("${jira.base-url}")
     private String baseUrl;
 
-    RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
 
     private HttpHeaders createHeaders() {
@@ -46,13 +35,13 @@ public class JiraServiceImpl implements JiraService {
     public ResponseEntity<String> getIssue(String issueKey) {
         HttpHeaders headers = createHeaders();
         ResponseEntity<String> responseEntity = restTemplate.exchange(
-                baseUrl + "issue/" + issueKey,
+                baseUrl + "/rest/api/2/issue/" + issueKey,
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
                 String.class
         );
 
-       return (ResponseEntity<String>) responseEntity;
+        return (ResponseEntity<String>) responseEntity;
 
     }
 }

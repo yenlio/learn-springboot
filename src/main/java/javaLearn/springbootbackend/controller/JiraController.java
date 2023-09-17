@@ -1,7 +1,9 @@
 package javaLearn.springbootbackend.controller;
 
 import javaLearn.springbootbackend.service.JiraService;
+import javaLearn.springbootbackend.service.impl.JiraServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,8 +18,6 @@ public class JiraController {
 
     @GetMapping("/issue/{issueKey}")
     public ResponseEntity<String> getIssue(@PathVariable String issueKey) {
-        String a="yen";
-        System.out.print(a);
         return jiraService.getIssue(issueKey);
 
     }
