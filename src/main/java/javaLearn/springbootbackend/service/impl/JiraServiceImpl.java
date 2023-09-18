@@ -1,5 +1,7 @@
 package javaLearn.springbootbackend.service.impl;
 
+
+import javaLearn.springbootbackend.model.IssueDTO;
 import javaLearn.springbootbackend.service.JiraService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -32,16 +34,27 @@ public class JiraServiceImpl implements JiraService {
     }
 
     @Override
-    public ResponseEntity<String> getIssue(String issueKey) {
+    public ResponseEntity<IssueDTO> getIssue(String issueKey) {
         HttpHeaders headers = createHeaders();
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
+        ResponseEntity<IssueDTO> responseEntity = restTemplate.exchange(
                 baseUrl + "/rest/api/2/issue/" + issueKey,
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
-                String.class
+                IssueDTO.class
         );
 
-        return (ResponseEntity<String>) responseEntity;
+        IssueDTO issue = responseEntity.getBody();
+        if (issue !=null){
+            IssueDTO issueDTO=new IssueDTO();
+            issueDTO.setId(issue.getId());
+            issueDTO.setKey(issue.getKey());
+            issueDTO.setSelf(issue.getSelf());
+
+            return ResponseEntity.ok(issueDTO);
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
 
     }
 }

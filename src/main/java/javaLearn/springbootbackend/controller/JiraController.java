@@ -1,5 +1,6 @@
 package javaLearn.springbootbackend.controller;
 
+import javaLearn.springbootbackend.model.IssueDTO;
 import javaLearn.springbootbackend.service.JiraService;
 import javaLearn.springbootbackend.service.impl.JiraServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class JiraController {
     private JiraService jiraService;
 
     @GetMapping("/issue/{issueKey}")
-    public ResponseEntity<String> getIssue(@PathVariable String issueKey) {
+    public ResponseEntity<IssueDTO> getIssue(@PathVariable String issueKey) {
         return jiraService.getIssue(issueKey);
 
     }
